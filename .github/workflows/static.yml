@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KALZ WEB</title>
+
+<style>
+body {
+    margin:0;
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(180deg,#05070d,#0a0f1f,#05070d);
+    color:#d6e4ff;
+}
+
+/* NAV */
+.nav {
+    display:flex;
+    justify-content:space-between;
+    padding:20px;
+}
+.logo {color:#6ab0ff;font-weight:bold;}
+.menu-btn {cursor:pointer;font-size:22px;}
+
+/* OVERLAY */
+#overlay {
+    position:fixed;
+    top:0;left:0;
+    width:100%;height:100%;
+    background:rgba(0,0,0,0.6);
+    opacity:0;
+    pointer-events:none;
+    transition:0.3s;
+    z-index:8;
+}
+#overlay.active {
+    opacity:1;
+    pointer-events:auto;
+}
+
+/* MENU */
+.side {
+    position:fixed;
+    top:0;
+    right:-100%;
+    width:75%;
+    height:100%;
+    transition:0.35s;
+    z-index:10;
+}
+.side.active {right:0;}
+
+.side-top {background:#081224;padding:20px;}
+.side-bottom {background:#0f1f3f;height:100%;padding:20px;}
+
+.menu-list {display:flex;flex-direction:column;gap:12px;margin-top:20px;}
+.menu-item {
+    padding:12px;
+    border-radius:10px;
+    background:rgba(255,255,255,0.05);
+    cursor:pointer;
+}
+.menu-item:hover {background:#2b7cff;}
+
+.close-btn {
+    position:absolute;
+    right:15px;
+    top:15px;
+    cursor:pointer;
+}
+
+/* HERO */
+.hero {
+    text-align:center;
+    padding:100px 20px;
+    transition:0.3s;
+}
+.title {
+    font-size:70px;
+    font-weight:900;
+    background:linear-gradient(90deg,#6ab0ff,#2b7cff);
+    -webkit-background-clip:text;
+    color:transparent;
+}
+.subtitle {color:#8faaff;}
+
+.btn {
+    margin-top:40px;
+    padding:15px 40px;
+    border-radius:40px;
+    background:#2b7cff;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+
+/* PANEL */
+.panel {
+    padding:20px;
+    opacity:0;
+    transform:translateY(20px);
+    pointer-events:none;
+    transition:0.3s;
+}
+.panel.active {
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
+}
+
+/* CATEGORY */
+.category {display:flex;gap:10px;}
+.cat {
+    flex:1;
+    padding:12px;
+    border:1px solid #2b7cff;
+    text-align:center;
+    cursor:pointer;
+}
+.active-tab {background:#2b7cff;}
+
+/* CARD */
+.card {
+    margin-top:20px;
+    padding:20px;
+    border-radius:20px;
+    border:1px solid #2b7cff;
+}
+
+/* PACKAGE */
+.packages {
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+}
+.pkg {
+    padding:10px;
+    border:1px solid #2b7cff;
+    text-align:center;
+    cursor:pointer;
+}
+.pkg.selected {background:#2b7cff;}
+
+/* 🔥 TAB ANIMATION FIX */
+.tab-container {
+    position:relative;
+    overflow:hidden;
+    height:auto;
+}
+
+.tab {
+    position:absolute;
+    width:100%;
+    top:0;
+    left:0;
+    opacity:0;
+    transform:translateX(40px);
+    transition:0.35s ease;
+    pointer-events:none;
+}
+
+.tab.active {
+    opacity:1;
+    transform:translateX(0);
+    pointer-events:auto;
+    position:relative;
+}
+
+/* BUY */
+.buy {
+    margin-top:20px;
+    width:100%;
+    padding:14px;
+    background:#2b7cff;
+    border:none;
+    border-radius:10px;
+    color:white;
+}
+
+/* POPUP */
+#buyPopup {
+    position:fixed;
+    bottom:-100%;
+    left:0;
+    width:100%;
+    background:#0b1224;
+    padding:20px;
+    border-radius:20px 20px 0 0;
+    transition:0.35s;
+    z-index:20;
+}
+#buyPopup.active {bottom:0;}
+
+.popup-btn {
+    width:100%;
+    padding:15px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+}
+.wa {background:#25D366;color:white;}
+.dc {background:#5865F2;color:white;}
+</style>
+</head>
+
+<body>
+
+<div id="overlay" onclick="closeAll()"></div>
+
+<div class="nav">
+    <div class="logo">KALZ</div>
+    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+</div>
+
+<!-- MENU -->
+<div id="sideMenu" class="side">
+    <div class="side-top">
+        <div class="close-btn" onclick="closeAll()">✖</div>
+        <h3>KALZ</h3>
+        <p style="font-size:12px;">premium cheat 1.0</p>
+    </div>
+    <div class="side-bottom">
+        <div class="menu-list">
+            <div class="menu-item" onclick="goHome()">Home</div>
+            <div class="menu-item" onclick="openPanel()">List Cheat</div>
+        </div>
+    </div>
+</div>
+
+<!-- HERO -->
+<div id="landing" class="hero">
+    <div class="title">KALZ XITER</div>
+    <div class="subtitle">premium cheat 1.0</div>
+    <button class="btn" onclick="openPanel()">LIHAT CHEAT</button>
+</div>
+
+<!-- PANEL -->
+<div id="panel" class="panel">
+
+    <h2>Panel VIP</h2>
+
+    <div class="category">
+        <div class="cat active-tab" onclick="switchTab('pc',this)">KALZ PC</div>
+        <div class="cat" onclick="switchTab('andro',this)">KALZ ANDRO</div>
+    </div>
+
+    <div class="tab-container">
+
+        <!-- PC -->
+        <div id="pc" class="card tab active">
+            <h3>KALZ REMOTE PANEL</h3>
+            <ul>
+                <li>AimHead</li>
+                <li>AimNeck</li>
+                <li>AimDrag</li>
+                <li>ESP</li>
+            </ul>
+
+            <div class="packages">
+                <div class="pkg" onclick="selectPkg(this,'PC 1H - 10K')">1H - 10K</div>
+                <div class="pkg" onclick="selectPkg(this,'PC 3H - 25K')">3H - 25K</div>
+                <div class="pkg" onclick="selectPkg(this,'PC 7H - 45K')">7H - 45K</div>
+                <div class="pkg" onclick="selectPkg(this,'PC 15H - 60K')">15H - 60K</div>
+                <div class="pkg" onclick="selectPkg(this,'PC 30H - 110K')">30H - 110K</div>
+            </div>
+        </div>
+
+        <!-- ANDRO -->
+        <div id="andro" class="card tab">
+            <h3>KALZ REMOTE PANEL ANDRO</h3>
+            <ul>
+                <li>Badan Headshot</li>
+                <li>Leher Headshot</li>
+                <li>Dada Headshot</li>
+                <li>Aim Silent</li>
+            </ul>
+
+            <div class="packages">
+                <div class="pkg" onclick="selectPkg(this,'ANDRO 1H - 15K')">1H - 15K</div>
+                <div class="pkg" onclick="selectPkg(this,'ANDRO 3H - 30K')">3H - 30K</div>
+                <div class="pkg" onclick="selectPkg(this,'ANDRO 7H - 50K')">7H - 50K</div>
+                <div class="pkg" onclick="selectPkg(this,'ANDRO 15H - 80K')">15H - 80K</div>
+                <div class="pkg" onclick="selectPkg(this,'ANDRO 30H - 140K')">30H - 140K</div>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="buy" onclick="openBuy()">BELI SEKARANG</button>
+</div>
+
+<!-- POPUP -->
+<div id="buyPopup">
+    <h3>Pilih Metode</h3>
+    <button class="popup-btn wa" onclick="buyWA()">🟢 Beli lewat WhatsApp</button>
+    <button class="popup-btn dc" onclick="buyDC()">🔵 Beli lewat Discord</button>
+</div>
+
+<script>
+let selectedPackage="";
+
+function toggleMenu(){
+    sideMenu.classList.toggle("active");
+    overlay.classList.toggle("active");
+}
+
+function closeAll(){
+    sideMenu.classList.remove("active");
+    overlay.classList.remove("active");
+    buyPopup.classList.remove("active");
+}
+
+function openPanel(){
+    landing.style.opacity="0";
+    setTimeout(()=>{
+        landing.style.display="none";
+        panel.classList.add("active");
+    },300);
+}
+
+function goHome(){
+    panel.classList.remove("active");
+    setTimeout(()=>{
+        landing.style.display="block";
+        setTimeout(()=>landing.style.opacity="1",10);
+    },300);
+}
+
+/* 🔥 SMOOTH TAB SWITCH */
+function switchTab(tab,el){
+    document.querySelectorAll('.cat').forEach(c=>c.classList.remove('active-tab'));
+    el.classList.add('active-tab');
+
+    document.querySelectorAll('.tab').forEach(t=>{
+        t.classList.remove('active');
+    });
+
+    setTimeout(()=>{
+        document.getElementById(tab).classList.add('active');
+    },50);
+}
+
+function selectPkg(el,pkg){
+    document.querySelectorAll('.pkg').forEach(p=>p.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPackage=pkg;
+}
+
+function openBuy(){
+    if(!selectedPackage){
+        alert("Pilih paket dulu!");
+        return;
+    }
+    overlay.classList.add("active");
+    buyPopup.classList.add("active");
+}
+
+function buyWA(){
+    let nomor="6281284654872";
+    let pesan=encodeURIComponent("Halo, saya mau beli "+selectedPackage);
+    window.open("https://wa.me/"+nomor+"?text="+pesan,"_blank");
+}
+
+function buyDC(){
+    window.open("https://discord.gg/pZgGKyzp3","_blank");
+}
+</script>
+
+</body>
+</html>
